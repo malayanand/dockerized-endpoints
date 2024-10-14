@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+    // url      = "postgresql://postgres:password@db:5432/visaDb?schema=public"
+}
+
+model Accounts {
+  Account_ID Int @id @default(autoincrement())
+  Document_Number String @unique
+  transactions Transactions[]
+}
+
+model OperationsType {
+  OperationType_ID Int @id @default(autoincrement())
+  Description String 
+  transactions Transactions[]
+}
+
+model Transactions {
+  Transaction_ID Int @id @default(autoincrement())
+  Account_ID Int 
+  OperationType_ID Int
+  Amount Float
+  EventDate DateTime
+
+  // relation to Accounts and OperationTypes
+  account Accounts @relation(fields: [Account_ID], references: [Account_ID])
+  operationType OperationsType @relation(fields: [OperationType_ID], references: [OperationType_ID]) 
+}
